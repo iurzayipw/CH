@@ -17,7 +17,6 @@ RUN apt-get update && env DEBIAN_FRONTEND=noninteractive apt-get install --yes \
         locales \
         moreutils \
         python3-pip \
-        yamllint \
         zstd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/debconf /tmp/*
@@ -44,7 +43,6 @@ RUN arch=${TARGETARCH:-amd64} \
   && mv /tmp/shellcheck /usr/bin \
   && rm -rf /tmp/*
 
-
 # Get act and actionlint from releases
 RUN arch=${TARGETARCH:-amd64} \
   && case $arch in \
@@ -59,7 +57,3 @@ RUN arch=${TARGETARCH:-amd64} \
     "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_${arch}.tar.gz" \
   && tar xf /tmp/actiolint.zip -C /usr/bin actionlint \
   && rm /tmp/actiolint.zip
-
-
-COPY run.sh /
-CMD ["/bin/bash", "/run.sh"]
