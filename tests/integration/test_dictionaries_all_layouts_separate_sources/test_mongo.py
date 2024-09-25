@@ -35,9 +35,11 @@ def source(secure_connection, legacy, started_cluster):
     return SourceMongo(
         "MongoDB",
         "localhost",
-        started_cluster.mongo_secure_port
-        if secure_connection
-        else started_cluster.mongo_port,
+        (
+            started_cluster.mongo_secure_port
+            if secure_connection
+            else started_cluster.mongo_port
+        ),
         "mongo_secure" if secure_connection else "mongo1",
         27017,
         "root",
