@@ -1847,13 +1847,13 @@ private:
 
         try
         {
-            writer->finalize();
             writer->flush();
+            writer->finalize();
         }
         catch (...)
         {
             /// Stop ParallelFormattingOutputFormat correctly.
-            releaseBuffers();
+            cancelBuffers();
             throw;
         }
 

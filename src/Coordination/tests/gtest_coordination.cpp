@@ -1031,6 +1031,7 @@ TYPED_TEST(CoordinationTest, ChangelogTestReadAfterBrokenTruncate)
     DB::WriteBufferFromFile plain_buf(
         "./logs/changelog_11_15.bin" + this->extension, DB::DBMS_DEFAULT_BUFFER_SIZE, O_APPEND | O_CREAT | O_WRONLY);
     plain_buf.truncate(0);
+    plain_buf.finalize();
 
     DB::KeeperLogStore changelog_reader(
         DB::LogFileSettings{.force_sync = true, .compress_logs = this->enable_compression, .rotate_interval = 5},
@@ -1104,6 +1105,7 @@ TYPED_TEST(CoordinationTest, ChangelogTestReadAfterBrokenTruncate2)
     DB::WriteBufferFromFile plain_buf(
         "./logs/changelog_1_20.bin" + this->extension, DB::DBMS_DEFAULT_BUFFER_SIZE, O_APPEND | O_CREAT | O_WRONLY);
     plain_buf.truncate(30);
+    plain_buf.finalize();
 
     DB::KeeperLogStore changelog_reader(
         DB::LogFileSettings{.force_sync = true, .compress_logs = this->enable_compression, .rotate_interval = 20},
@@ -1161,6 +1163,7 @@ TYPED_TEST(CoordinationTest, ChangelogTestReadAfterBrokenTruncate3)
     DB::WriteBufferFromFile plain_buf(
         "./logs/changelog_1_20.bin", DB::DBMS_DEFAULT_BUFFER_SIZE, O_APPEND | O_CREAT | O_WRONLY);
     plain_buf.truncate(plain_buf.size() - 30);
+    plain_buf.finalize();
 
     DB::KeeperLogStore changelog_reader(
         DB::LogFileSettings{.force_sync = true, .compress_logs = false, .rotate_interval = 20},
@@ -1793,7 +1796,7 @@ TYPED_TEST(CoordinationTest, TestStorageSnapshotBroken)
     DB::WriteBufferFromFile plain_buf(
         "./snapshots/snapshot_50.bin" + this->extension, DB::DBMS_DEFAULT_BUFFER_SIZE, O_APPEND | O_CREAT | O_WRONLY);
     plain_buf.truncate(34);
-    plain_buf.sync();
+    plain_buf.finalize();
 
     EXPECT_THROW(manager.restoreFromLatestSnapshot(), DB::Exception);
 }
